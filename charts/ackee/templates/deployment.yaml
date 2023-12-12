@@ -41,6 +41,9 @@ spec:
               value: "{{ .Values.ackee.trackerName }}"
             - name: ACKEE_ALLOW_ORIGIN
               value: "{{ .Values.ackee.corsHeaders }}"
+          volumeMounts:
+            - mountPath: /srv/app/dist
+              name: dist
           ports:
             - name: http
               containerPort: 3000
@@ -69,6 +72,10 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      volumes:
+        - name: dist
+          emptyDir:
+            sizeLimit: 1Mi
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
